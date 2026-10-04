@@ -391,6 +391,14 @@
             <p style="text-align: center; margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted);" id="ccpsExplanation">
                 Since ₹24.00 Cr is higher than the cap, the conversion is capped at ₹20.00 Cr.
             </p>
+
+            <div class="result-box highlight" style="margin-top: 1.25rem; padding: 1.25rem 1.5rem;">
+                <div class="label">Real value of this stake at conversion</div>
+                <div class="value" id="stakeValue" style="font-size: 1.75rem; margin: 0.35rem 0;">₹7.50 Cr</div>
+                <p id="stakeValueNote" style="font-size: 0.9rem; line-height: 1.45; margin: 0;">
+                    A ₹50 Lakh investment, made at the right time, is worth ₹7.50 Cr when the company is valued at ₹300.00 Cr.
+                </p>
+            </div>
         </div>
     </div>
 
@@ -507,6 +515,14 @@
         return '₹' + amount.toFixed(2) + ' Cr';
     }
 
+    function formatTicket(rupees) {
+        const lakhs = rupees / 100000;
+        if (lakhs >= 100) return formatCrores(rupees / 10000000);
+        const rounded = Math.round(lakhs * 100) / 100;
+        const label = Number.isInteger(rounded) ? rounded.toFixed(0) : rounded.toFixed(2);
+        return '₹' + label + (rounded === 1 ? ' Lakh' : ' Lakhs');
+    }
+
     // OCD Calculator Logic
     function calculateEMI() {
         const principal = parseFloat(document.getElementById('ocdPrincipal').value) || 0;
@@ -544,6 +560,11 @@
         document.getElementById('discountedVal').innerText = formatCrores(discountedVal);
         document.getElementById('effectiveVal').innerText = formatCrores(effectiveVal);
         document.getElementById('impliedEquity').innerText = impliedEquity.toFixed(2) + '%';
+
+        const stakeValueCr = effectiveVal > 0 ? (impliedEquity / 100) * futureVal : 0;
+        document.getElementById('stakeValue').innerText = formatCrores(stakeValueCr);
+        document.getElementById('stakeValueNote').innerText =
+            `A ${formatTicket(investment)} investment, made at the right time, is worth ${formatCrores(stakeValueCr)} when the company is valued at ${formatCrores(futureVal)}.`;
         
         const explanationText = document.getElementById('ccpsExplanation');
         if (discountedVal > cap) {
