@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RentBasket - Instrument Term Sheets</title>
+    <style>
+        :root {
+            /* Primary Colours */
+            --deep-forest: #0F3C36;
+            --rentbasket-green: #2B9964;
+            --fresh-mint: #51BC8E;
+            --soft-cream: #F7F3E7;
+
+            /* Secondary Colours */
+            --green-darker: #DAF2E6;
+            --green-softer: #EBF5EB;
+            --coral-darker: #E19274;
+            --coral-softer: #EBB4A8;
+            --blue-darker: #BDE1F9;
+            --blue-softer: #DAF0FC;
+            --mustard: #EDDBC1;
+            --cream: #F2ECD8;
+            
+            /* Text & UI */
+            --text-main: #0F3C36;
+            --text-muted: #4a5c59;
+            --border: #DAF2E6;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--soft-cream);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(15, 60, 54, 0.08);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .header {
+            background-color: var(--deep-forest);
+            color: var(--soft-cream);
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--fresh-mint);
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: var(--green-darker);
+            border-bottom: 2px solid var(--rentbasket-green);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            background: transparent;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--deep-forest);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            background: var(--green-softer);
+        }
+
+        .tab-btn.active {
+            background: var(--rentbasket-green);
+            color: #ffffff;
+        }
+
+        .content {
+            padding: 2.5rem;
+            display: none;
+        }
+
+        .content.active {
+            display: block;
+        }
+
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: var(--green-softer);
+            border: 1px solid var(--green-darker);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(43, 153, 100, 0.1);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .card h3 {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .card p {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--deep-forest);
+        }
+
+        .timeline-container {
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 24px;
+            width: 4px;
+            background: var(--green-darker);
+            border-radius: 4px;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 60px;
+            margin-bottom: 2rem;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: 14px;
+            top: 4px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--rentbasket-green);
+            border: 4px solid #ffffff;
+            box-shadow: 0 0 0 4px var(--green-darker);
+        }
+
+        .timeline-content {
+            background: #ffffff;
+            border: 1px solid var(--green-darker);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .timeline-content h4 {
+            color: var(--deep-forest);
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--fresh-mint);
+            color: #ffffff;
+            padding: 0.35rem 0.85rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .badge.alert { background: var(--coral-darker); }
+        .badge.info { background: var(--blue-darker); color: var(--deep-forest); }
+        .badge.mustard { background: var(--mustard); color: var(--deep-forest); }
+
+        .split-path {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+            border-top: 1px solid var(--green-darker);
+            padding-top: 1rem;
+        }
+
+        .path {
+            flex: 1;
+            min-width: 200px;
+            background: var(--soft-cream);
+            border: 1px solid var(--mustard);
+            padding: 1rem;
+            border-radius: 6px;
+        }
+
+        .calculator {
+            background: var(--blue-softer);
+            border: 1px solid var(--blue-darker);
+            border-radius: 8px;
+            padding: 2rem;
+        }
+
+        .calc-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--deep-forest);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--blue-darker);
+            border-radius: 6px;
+            font-size: 1.1rem;
+            background: #ffffff;
+            color: var(--deep-forest);
+        }
+
+        .results {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .result-box {
+            background: #ffffff;
+            border: 1px solid var(--blue-darker);
+            padding: 1rem;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .result-box .label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+        }
+
+        .result-box .value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--deep-forest);
+        }
+        
+        .result-box.highlight {
+            background: var(--rentbasket-green);
+            border-color: var(--deep-forest);
+        }
+        
+        .result-box.highlight .label,
+        .result-box.highlight .value {
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="header">
+        <h1>RentBasket Investment Structures</h1>
+        <p>Interactive Term Sheet Visualizer</p>
+    </header>
+
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('ccps-view')">CCPS Terms (Priced Round)</button>
+        <button class="tab-btn" onclick="switchTab('ocd-view')">OCD Terms (Debt/Equity Hybrid)</button>
+    </div>
+
+    <!-- CCPS VIEW -->
+    <div id="ccps-view" class="content active">
+        <div class="grid-cards">
+            <div class="card">
+                <div class="card-icon">🎯</div>
+                <h3>Valuation Cap</h3>
+                <p>₹20 Cr</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">📉</div>
+                <h3>Valuation Discount</h3>
+                <p>20% Flat</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">📅</div>
+                <h3>Conversion Date</h3>
+                <p>Sept 30, 2028</p>
+            </div>
+        </div>
+
+        <h2 style="margin-bottom: 1.5rem; color: var(--deep-forest);">Execution Lifecycle (Compulsorily Convertible)</h2>
+        <div class="timeline-container">
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <span class="badge info">Holding Period (Current – Sept 2028)</span>
+                    <h4>Preference Share Issuance</h4>
+                    <p>Investors hold Compulsorily Convertible Preference Shares (CCPS). Unlike OCDs, this instrument carries <strong>no interest burden</strong> and guarantees equity participation. It protects investors via downside anti-dilution mechanisms.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-marker" style="background: var(--coral-darker);"></div>
+                <div class="timeline-content">
+                    <span class="badge alert">Trigger Milestone: Sept 30, 2028</span>
+                    <h4>Mandatory Conversion Event</h4>
+                    <p>At exactly 2 years from issuance (or upon a Qualified Financing event prior to this date), the CCPS automatically converts into Equity Shares. The conversion price per share is dictated by the <strong>"Lower Of"</strong> mechanism:</p>
+                    
+                    <div class="split-path">
+                        <div class="path" style="border-color: var(--rentbasket-green);">
+                            <div style="font-weight: 700; color: var(--rentbasket-green); margin-bottom: 0.5rem;">Scenario A: Next Round is > ₹25 Cr</div>
+                            <p>Investor converts at the strict <strong>₹20 Cr Valuation Cap</strong>. (Protects investor in hyper-growth scenarios).</p>
+                        </div>
+                        <div class="path" style="border-color: var(--blue-darker);">
+                            <div style="font-weight: 700; color: var(--deep-forest); margin-bottom: 0.5rem;">Scenario B: Next Round is < ₹25 Cr</div>
+                            <p>Investor converts at a <strong>20% Discount</strong> to the actual round valuation. (Protects investor in slower-growth scenarios).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="calculator" style="background: var(--green-softer); border-color: var(--green-darker);">
+            <div class="calc-header">
+                <h2 style="color: var(--deep-forest);">CCPS Conversion Simulator</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">See how the Cap vs. Discount logic protects the investor based on your future valuation.</p>
+            </div>
+
+            <div class="input-group">
+                <label>Assumed Valuation at Conversion (₹ Crores)</label>
+                <input type="number" id="futureVal" value="30" min="1" step="1" oninput="calculateCCPS()">
+            </div>
+            
+            <div class="input-group">
+                <label>Investor Ticket Size (₹)</label>
+                <input type="number" id="ccpsInvestment" value="1000000" min="100000" step="100000" oninput="calculateCCPS()">
+            </div>
+
+            <div class="results">
+                <div class="result-box">
+                    <div class="label">Discounted Valuation (20% Off)</div>
+                    <div class="value" id="discountedVal">₹24.00 Cr</div>
+                </div>
+                <div class="result-box highlight">
+                    <div class="label">Effective Conversion Valuation</div>
+                    <div class="value" id="effectiveVal">₹20.00 Cr</div>
+                </div>
+                <div class="result-box">
+                    <div class="label">Implied Equity Stake Given</div>
+                    <div class="value" id="impliedEquity">0.50%</div>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted);" id="ccpsExplanation">
+                Since ₹24.00 Cr is higher than the cap, the conversion is capped at ₹20.00 Cr.
+            </p>
+        </div>
+    </div>
+
+    <!-- OCD VIEW -->
+    <div id="ocd-view" class="content">
+        <div class="grid-cards">
+            <div class="card">
+                <div class="card-icon">📈</div>
+                <h3>Interest Rate</h3>
+                <p>18% YoY</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🏷️️</div>
+                <h3>Conversion Discount</h3>
+                <p>15% Flat</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">⏳</div>
+                <h3>Decision Milestone</h3>
+                <p>Month 24</p>
+            </div>
+        </div>
+
+        <h2 style="margin-bottom: 1.5rem; color: var(--deep-forest);">Execution Lifecycle (Optionally Convertible)</h2>
+        <div class="timeline-container">
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <span class="badge info">Months 0 – 24</span>
+                    <h4>Initial Holding Period</h4>
+                    <p>Investor holds the Optionally Convertible Debenture. During this 24-month period, the principal accrues interest at a flat rate of <strong>18% YoY</strong>. No cash outflow is required from RentBasket.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-marker" style="background: var(--mustard);"></div>
+                <div class="timeline-content">
+                    <span class="badge mustard">Month 24 Milestone</span>
+                    <h4>The Crossroads Decision</h4>
+                    <p>Exactly 24 months from the First Allotment Date, the investor must formally elect one of two paths:</p>
+                    
+                    <div class="split-path">
+                        <div class="path">
+                            <div style="font-weight: 700; color: var(--rentbasket-green); margin-bottom: 0.5rem;">🔄 Option A: Conversion</div>
+                            <p>The original principal + 24 months of accrued interest is converted into equity shares at a <strong>15% discounted valuation</strong>.</p>
+                        </div>
+                        <div class="path">
+                            <div style="font-weight: 700; color: var(--coral-darker); margin-bottom: 0.5rem;">💸 Option B: Repayment Exit</div>
+                            <p>The debt is consolidated (Principal + 24M Interest) and the EMI repayment phase is triggered immediately.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-marker" style="background: var(--rentbasket-green);"></div>
+                <div class="timeline-content">
+                    <span class="badge">Months 25 – 48 (If Repayment Chosen)</span>
+                    <h4>EMI Amortization Phase</h4>
+                    <p>The consolidated debt from Month 24 is paid out over <strong>24 Equated Monthly Installments (EMIs)</strong>. The 18% YoY interest rate continues to apply to the declining balance.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="calculator">
+            <div class="calc-header">
+                <h2 style="color: var(--deep-forest);">EMI Exit Simulator</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Calculate the monthly cash outflow if an investor declines equity at Month 24.</p>
+            </div>
+
+            <div class="input-group">
+                <label>Initial Ticket Size (₹)</label>
+                <input type="number" id="ocdPrincipal" value="1000000" min="100000" step="100000" oninput="calculateEMI()">
+            </div>
+
+            <div class="results">
+                <div class="result-box">
+                    <div class="label">Total Debt at Month 24</div>
+                    <div class="value" id="consolidatedDebt">₹13,60,000</div>
+                </div>
+                <div class="result-box highlight">
+                    <div class="label">Monthly EMI (Months 25-48)</div>
+                    <div class="value" id="emiValue">₹67,896</div>
+                </div>
+                <div class="result-box">
+                    <div class="label">Total Cash Payout</div>
+                    <div class="value" id="totalPayout">₹16,29,504</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Tab Switching Logic
+    function switchTab(tabId) {
+        document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        
+        document.getElementById(tabId).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+
+    // Currency Formatter
+    function formatCurrency(amount) {
+        return new Intl.NumberFormat('en-IN', {
+            style: 'currency',
+            currency: 'INR',
+            maximumFractionDigits: 0
+        }).format(amount);
+    }
+    
+    function formatCrores(amount) {
+        return '₹' + amount.toFixed(2) + ' Cr';
+    }
+
+    // OCD Calculator Logic
+    function calculateEMI() {
+        const principal = parseFloat(document.getElementById('ocdPrincipal').value) || 0;
+        const consolidatedDebt = principal + (principal * 0.18 * 2);
+        const r = 0.015; // 1.5% monthly
+        const n = 24;
+        
+        let emi = 0;
+        let totalPayout = 0;
+
+        if (consolidatedDebt > 0) {
+            emi = (consolidatedDebt * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+            totalPayout = emi * n;
+        }
+
+        document.getElementById('consolidatedDebt').innerText = formatCurrency(consolidatedDebt);
+        document.getElementById('emiValue').innerText = formatCurrency(emi);
+        document.getElementById('totalPayout').innerText = formatCurrency(totalPayout);
+    }
+
+    // CCPS Calculator Logic
+    function calculateCCPS() {
+        const futureVal = parseFloat(document.getElementById('futureVal').value) || 0;
+        const investment = parseFloat(document.getElementById('ccpsInvestment').value) || 0;
+        const cap = 20; 
+        const discountRate = 0.8; // 20% discount
+        
+        const discountedVal = futureVal * discountRate;
+        const effectiveVal = Math.min(discountedVal, cap);
+        
+        // Investment in Crores for % calculation
+        const investmentCr = investment / 10000000;
+        const impliedEquity = (investmentCr / effectiveVal) * 100;
+
+        document.getElementById('discountedVal').innerText = formatCrores(discountedVal);
+        document.getElementById('effectiveVal').innerText = formatCrores(effectiveVal);
+        document.getElementById('impliedEquity').innerText = impliedEquity.toFixed(2) + '%';
+        
+        const explanationText = document.getElementById('ccpsExplanation');
+        if (discountedVal > cap) {
+            explanationText.innerText = `Since the discounted valuation (₹${discountedVal.toFixed(2)} Cr) is higher than the cap, the conversion is capped at ₹20.00 Cr, yielding a higher equity stake for the investor.`;
+        } else {
+            explanationText.innerText = `Since the discounted valuation (₹${discountedVal.toFixed(2)} Cr) is lower than the cap, the investor converts at the 20% discount.`;
+        }
+    }
+
+    // Initialize both calculators
+    calculateEMI();
+    calculateCCPS();
+</script>
+
+</body>
+</html>
